@@ -8,7 +8,7 @@ struct Node
 	Node* ptrPrev;
 	Node()
 	{
-		data = NULL;
+		data = {};
 		ptrNext = nullptr;
 		ptrPrev = nullptr;
 	}
