@@ -3,15 +3,9 @@
 template <class T>
 struct Node
 {
-	T data;
-	Node* ptrNext;
-	Node* ptrPrev;
-	Node()
-	{
-		data = {};
-		ptrNext = nullptr;
-		ptrPrev = nullptr;
-	}
+	T data{};
+	Node* ptrPrev{ nullptr };
+	Node* ptrNext{ nullptr };
 };
 
 template <class T>
