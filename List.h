@@ -1,6 +1,6 @@
 #include <iostream>
 
-template <typename T>
+template <class T>
 struct Node
 {
 	T data;
@@ -14,13 +14,13 @@ struct Node
 	}
 };
 
-template <typename T>
+template <class T>
 class List
 {
 private:
 	Node<T>* Cell;
 	size_t size = 0;
-	int maxSize = 0;
+	size_t maxSize = 0;
 public:
 	List() {}
 	List(T newData)
