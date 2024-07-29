@@ -73,7 +73,7 @@ public:
 	{
 		if (Cell == nullptr)
 		{
-			return nullptr;
+			return 0;
 		}
 		size--;
 		Node<T>* _tempCell = Cell;
@@ -95,7 +95,7 @@ public:
 	{
 		if (Cell == nullptr)
 		{
-			return nullptr;
+			return 0;
 		}
 		size--;
 

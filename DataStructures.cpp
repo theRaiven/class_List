@@ -11,9 +11,9 @@ int main()
 	list1.PushBack(2);
 	list1.PushBack(4);
 	list1.PushBack(5);
-	list1.PushFront(1);
+	list1.PushFront(1); list1.PopBack();
 	//list1.Clear();
 	list1.Print();
-	list1.Empty();
+	list1.IsEmpty();
 
 }
