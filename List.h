@@ -71,11 +71,11 @@ public:
 	}
 	decltype(auto) PopBack()
 	{
-		size--;
 		if (Cell == nullptr)
 		{
-			return NULL;
+			return nullptr;
 		}
+		size--;
 		Node<T>* _tempCell = Cell;
 		while (_tempCell->ptrNext->ptrNext != nullptr)
 		{
@@ -93,11 +93,11 @@ public:
 	}
 	decltype(auto) PopFront()
 	{
-		size--;
 		if (Cell == nullptr)
 		{
-			return NULL;
+			return nullptr;
 		}
+		size--;
 
 		Node<T>* _firstCell = Cell;
 		Cell = Cell->ptrNext;
@@ -170,23 +170,19 @@ public:
 		}
 	}
 
-	bool Empty() const
+	bool IsEmpty() const
 	{
-		if (Cell != nullptr)
-		{
-			return false;
-		}
-		return true;
+		return Cell == nullptr;
 	}
-	int Size()
+	int Size() const
 	{
 		return size;
 	}
-	int MaxSize()
+	int MaxSize() const
 	{
 		return maxSize;
 	}
-	void Print()
+	void Print() const
 	{
 		Node<T>* _temp = Cell;
 		while (_temp != nullptr)
