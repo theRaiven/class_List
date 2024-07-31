@@ -8,21 +8,24 @@ struct Node
 	Node* ptrNext{ nullptr };
 };
 
+
+
 template <class T>
 class List
 {
 private:
 	Node<T>* Cell;
-	size_t size = 0;
-	size_t maxSize = 0;
+	size_t size{ 0 };
+	size_t maxSize{ 0 };
+
 public:
 	List() {}
-	List(T newData)
+	List(std::initializer_list<T> firstNodes)
 	{
-		Cell = new Node<T>;
-		Cell->data = newData;
-		size++;
-		maxSize++;
+		for(auto _valueToAdd : firstNodes)
+		{
+			PushBack(_valueToAdd);
+		}
 	}
 
 	void PushBack(T newData)
@@ -36,7 +39,7 @@ public:
 		}
 
 		Node<T>* _newCell = new Node<T>;
-		Node<T>* _lastCell = Cell;
+		Node<T>* _lastCell{ Cell };
 
 		while (_lastCell->ptrNext != nullptr)
 		{
@@ -76,20 +79,34 @@ public:
 			return 0;
 		}
 		size--;
-		Node<T>* _tempCell = Cell;
-		while (_tempCell->ptrNext->ptrNext != nullptr)
+		Node<T>* _tempCell{ Cell };
+
+		if(_tempCell->ptrNext != nullptr)
 		{
-			_tempCell = _tempCell->ptrNext;
+			while (_tempCell->ptrNext->ptrNext != nullptr)
+			{
+				_tempCell = _tempCell->ptrNext;
+			}
+			Node<T>* _lastCell{ _tempCell->ptrNext };
+
+			_tempCell->ptrNext = nullptr;
+			_lastCell->ptrPrev = nullptr;
+
+			T _popData = _lastCell->data;
+			delete _lastCell;
+			_lastCell = nullptr;
+
+			return _popData;
 		}
-		Node<T>* _lastCell = _tempCell->ptrNext;
+		else
+		{
+			T _popData = _tempCell->data;
+			delete _tempCell;
+			_tempCell = nullptr;
+			Cell = nullptr;
 
-		_tempCell->ptrNext = nullptr;
-		_lastCell->ptrPrev = nullptr;
-
-		T _popData = _lastCell->data;
-		delete _lastCell;
-
-		return _popData;
+			return _popData;
+		}
 	}
 	decltype(auto) PopFront()
 	{
@@ -99,7 +116,7 @@ public:
 		}
 		size--;
 
-		Node<T>* _firstCell = Cell;
+		Node<T>* _firstCell{ Cell };
 		Cell = Cell->ptrNext;
 		Cell->ptrPrev = nullptr;
 
@@ -111,7 +128,7 @@ public:
 	void Insert(T newData, int index)
 	{
 		size++; maxSize++;
-		Node<T>* _moveCell = Cell;
+		Node<T>* _moveCell{ Cell };
 		Node<T>* _newCell = new Node<T>;
 
 		int i = 1;
@@ -162,23 +179,24 @@ public:
 	{
 		while (size != 0)
 		{
-			Node<T>* _deleteCell = Cell;
+			Node<T>* _deleteCell{ Cell };
 			Cell = Cell->ptrNext;
 			delete _deleteCell;
 			_deleteCell = nullptr;
 			size--;
 		}
+		maxSize = 0;
 	}
 
 	bool IsEmpty() const
 	{
 		return Cell == nullptr;
 	}
-	int Size() const
+	size_t Size() const
 	{
 		return size;
 	}
-	int MaxSize() const
+	size_t MaxSize() const
 	{
 		return maxSize;
 	}
@@ -190,5 +208,29 @@ public:
 			std::cout << _temp->data << ' ';
 			_temp = _temp->ptrNext;
 		}
+	}
+
+	
+	decltype(auto) operator[](int index)
+	{
+		Node<T>* _indexCell = Cell;
+		int i = 0;
+		for (i = 0; i < index; i++)
+		{
+			if (i >= Size())
+			{
+				std::cerr << "error";
+				break;
+			}
+			_indexCell = _indexCell->ptrNext;
+		}
+		if (i < Size())
+		{
+			return _indexCell->data;
+		}
+	}
+	std::ostream operator<< (std::ostream& out)
+	{
+		return out << Cell->data;
 	}
 };

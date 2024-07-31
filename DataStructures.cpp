@@ -2,18 +2,26 @@
 //
 
 #include "List.h"
+using namespace std;
+
+auto Max = [](auto x, auto y)
+{
+	return x < y;
+};
+
 
 int main()
 {
-	
-	List<int> list1 = 1;
-	
-	list1.PushBack(2);
-	list1.PushBack(4);
-	list1.PushBack(5);
-	list1.PushFront(1); list1.PopBack();
-	//list1.Clear();
-	list1.Print();
-	list1.IsEmpty();
+	int x1 = 1;
+	int x2 = 2;
+	int x3 = 3;
+	int x4 = 4;
+	List<int> list { x1, x2, x3 };
 
+	list.PushBack(x4);
+	
+	for(int i = 0; i < 7; i++)
+	{
+		cout << list.PopBack() << " ";
+	}
 }
