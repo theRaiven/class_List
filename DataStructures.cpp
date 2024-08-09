@@ -2,26 +2,46 @@
 //
 
 #include "List.h"
+#include <utility>
 using namespace std;
 
-auto Max = [](auto x, auto y)
+auto Swap = [](auto x, auto y)
 {
-	return x < y;
+	auto temp{ std::move(x) };
+	x = std::move(y);
+	y = std::move(temp);
+};
+template<class T>
+class Distance
+{
+private:
+	T data;
+public:
+	decltype(auto) Return()
+	{
+		return data;
+	}
 };
 
+template<typename T>
+using DistList = List<Distance<T>>;
+	
 
 int main()
 {
-	int x1 = 1;
-	int x2 = 2;
-	int x3 = 3;
-	int x4 = 4;
-	List<int> list { x1, x2, x3 };
+	/*int a{ 6 };
+	int b{ 4 };
+	Swap(a, b);
+	cout << a << " " << b << endl;*/
 
-	list.PushBack(x4);
+	constexpr int x1{ 1 };
+	List<int> list { x1, 2, 3 };
+
+	list.PushBack(4);
 	
-	for(int i = 0; i < 7; i++)
+	for(int i = 0; i < 4; i++)
 	{
-		cout << list.PopBack() << " ";
+		cout << list[i] << " ";
 	}
+	list.Clear();
 }
