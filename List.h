@@ -1,11 +1,14 @@
 #include <iostream>
+#include <memory>
+
+
 
 template <class T>
 struct Node
 {
 	T data{};
-	Node* ptrPrev{ nullptr };
-	Node* ptrNext{ nullptr };
+	std::shared_ptr<Node<T>> ptrPrev{ nullptr };
+	std::shared_ptr<Node<T>> ptrNext{ nullptr };
 };
 
 
@@ -14,32 +17,33 @@ template <class T>
 class List
 {
 private:
-	Node<T>* Cell;
+	std::shared_ptr<Node<T>> Cell;
 	size_t size{ 0 };
 	size_t maxSize{ 0 };
 
 public:
-	List() {}
-	List(std::initializer_list<T> firstNodes)
+	constexpr List() {}
+	constexpr List(std::initializer_list<T> firstNodes)
 	{
 		for(auto _valueToAdd : firstNodes)
 		{
 			PushBack(_valueToAdd);
 		}
 	}
+	 ~List() { std::cout << "Delete elem" << std::endl; }
 
 	void PushBack(T newData)
 	{
 		size++; maxSize++;
 		if (Cell == nullptr)
 		{
-			Cell = new Node<T>;
+			Cell = std::make_shared<Node<T>>();
 			Cell->data = newData;
 			return;
 		}
 
-		Node<T>* _newCell = new Node<T>;
-		Node<T>* _lastCell{ Cell };
+		std::shared_ptr<Node<T>> _newCell = std::make_shared<Node<T>>();
+		std::shared_ptr<Node<T>> _lastCell{ Cell };
 
 		while (_lastCell->ptrNext != nullptr)
 		{
@@ -59,12 +63,12 @@ public:
 		size++; maxSize++;
 		if (Cell == nullptr)
 		{
-			Cell = new Node<T>;
+			Cell = std::make_shared<Node<T>>();
 			Cell->data = newData;
 			return;
 		}
 
-		Node<T>* _newCell = new Node<T>;
+		std::shared_ptr<Node<T>> _newCell = std::make_shared<Node<T>>();
 
 		_newCell->data = newData;
 		_newCell->ptrNext = Cell;
@@ -79,7 +83,7 @@ public:
 			return 0;
 		}
 		size--;
-		Node<T>* _tempCell{ Cell };
+		std::shared_ptr<Node<T>> _tempCell{ Cell };
 
 		if(_tempCell->ptrNext != nullptr)
 		{
@@ -87,22 +91,22 @@ public:
 			{
 				_tempCell = _tempCell->ptrNext;
 			}
-			Node<T>* _lastCell{ _tempCell->ptrNext };
+			std::shared_ptr<Node<T>> _lastCell{ _tempCell->ptrNext };
 
 			_tempCell->ptrNext = nullptr;
 			_lastCell->ptrPrev = nullptr;
 
-			T _popData = _lastCell->data;
-			delete _lastCell;
-			_lastCell = nullptr;
+			T _popData{ _lastCell->data };
+			// delete _lastCell;
+			//_lastCell = nullptr;
 
 			return _popData;
 		}
 		else
 		{
-			T _popData = _tempCell->data;
-			delete _tempCell;
-			_tempCell = nullptr;
+			T _popData{ _tempCell->data };
+			//delete _tempCell;
+			//_tempCell = nullptr;
 			Cell = nullptr;
 
 			return _popData;
@@ -116,20 +120,30 @@ public:
 		}
 		size--;
 
-		Node<T>* _firstCell{ Cell };
-		Cell = Cell->ptrNext;
-		Cell->ptrPrev = nullptr;
+		if (Cell->ptrNext != nullptr)
+		{
+			std::shared_ptr<Node<T>> _firstCell{ Cell };
+			Cell = Cell->ptrNext;
+			Cell->ptrPrev = nullptr;
 
-		T _popData = _firstCell->data;
-		delete _firstCell;
-		return _popData;
+			T _popData{ _firstCell->data };
+			//delete _firstCell;
+			return _popData;
+		}
+		else
+		{
+			T _popData = Cell->data;
+			//delete Cell;
+			Cell = nullptr;
+			return _popData;
+		}
 	}
 
 	void Insert(T newData, int index)
 	{
 		size++; maxSize++;
-		Node<T>* _moveCell{ Cell };
-		Node<T>* _newCell = new Node<T>;
+		std::shared_ptr<Node<T>> _moveCell{ Cell };
+		std::shared_ptr<Node<T>> _newCell = std::make_shared<Node<T>>();
 
 		int i = 1;
 		while (_moveCell->ptrNext != nullptr && i < index - 1)
@@ -151,7 +165,7 @@ public:
 	void Remove(int index)
 	{
 		size--;
-		Node<T>* _moveCell = Cell;
+		std::shared_ptr<Node<T>>  _moveCell{ Cell };
 
 		int i = 0;
 		while (_moveCell->ptrNext != nullptr && i < index - 1)
@@ -163,12 +177,12 @@ public:
 
 		if (_moveCell->ptrNext != nullptr)
 		{
-			Node<T>* _deleteCell = _moveCell;
+			std::shared_ptr<Node<T>>  _deleteCell{ _moveCell };
 
 			_moveCell->ptrNext->ptrPrev = _moveCell->ptrPrev;
 			_moveCell->ptrPrev->ptrNext = _moveCell->ptrNext;
 
-			delete _deleteCell;
+			//delete _deleteCell;
 		}
 		else
 		{
@@ -179,30 +193,30 @@ public:
 	{
 		while (size != 0)
 		{
-			Node<T>* _deleteCell{ Cell };
+			std::shared_ptr<Node<T>> _deleteCell{ Cell };
 			Cell = Cell->ptrNext;
-			delete _deleteCell;
+			//delete _deleteCell;
 			_deleteCell = nullptr;
 			size--;
 		}
 		maxSize = 0;
 	}
 
-	bool IsEmpty() const
+	constexpr bool IsEmpty() 
 	{
 		return Cell == nullptr;
 	}
-	size_t Size() const
+	constexpr size_t Size()
 	{
 		return size;
 	}
-	size_t MaxSize() const
+	constexpr size_t MaxSize()
 	{
 		return maxSize;
 	}
-	void Print() const
+	constexpr void Print()
 	{
-		Node<T>* _temp = Cell;
+		std::shared_ptr<Node<T>> _temp{ Cell };
 		while (_temp != nullptr)
 		{
 			std::cout << _temp->data << ' ';
@@ -213,7 +227,7 @@ public:
 	
 	decltype(auto) operator[](int index)
 	{
-		Node<T>* _indexCell = Cell;
+		std::shared_ptr<Node<T>> _indexCell{ Cell };
 		int i = 0;
 		for (i = 0; i < index; i++)
 		{
@@ -229,8 +243,9 @@ public:
 			return _indexCell->data;
 		}
 	}
-	std::ostream operator<< (std::ostream& out)
+
+	/*std::ostream operator<< (std::ostream& out)
 	{
 		return out << Cell->data;
-	}
+	}*/
 };
