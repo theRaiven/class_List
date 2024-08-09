@@ -25,7 +25,7 @@ public:
 
 template<typename T>
 using DistList = List<Distance<T>>;
-	
+
 
 int main()
 {
@@ -33,15 +33,20 @@ int main()
 	int b{ 4 };
 	Swap(a, b);
 	cout << a << " " << b << endl;*/
-
-	constexpr int x1{ 1 };
-	List<int> list { x1, 2, 3 };
-
-	list.PushBack(4);
+	List<int> myList{ 1,3,4,6 };
 	
-	for(int i = 0; i < 4; i++)
-	{
-		cout << list[i] << " ";
-	}
-	list.Clear();
+	
+	myList.Remove(3);
+	myList.Remove(5);
+	/*myList.PopFront();
+	myList.PopFront();
+	myList.PopFront();
+	myList.PopFront();*/
+	
+	myList.PopFront();
+	//myList.Print();
+	cout << myList;
+	myList.Clear();
+
+
 }
