@@ -1,8 +1,6 @@
 #include <iostream>
 #include <memory>
 
-
-
 template <class T>
 struct Node
 {
