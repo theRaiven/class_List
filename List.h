@@ -134,6 +134,12 @@ public:
 			PushFront(newData);
 			return;
 		}
+		if (index == size-1)
+		{
+			PushBack(newData);
+			return;
+		}
+
 		size++; maxSize++;
 		std::shared_ptr<Node<T>> _moveCell;
 		if (index > size/2)
@@ -188,7 +194,11 @@ public:
 			PopFront();
 			return;
 		}
-
+		if (index == size - 1)
+		{
+			PopBack();
+			return;
+		}
 		std::shared_ptr<Node<T>>  _moveCell;
 		if (index > size / 2)
 		{
@@ -370,6 +380,7 @@ public:
 	using List<T>::Print;
 
 	using List<T>::operator[];
+	using List<T>::operator<<;
 };
 
 template <class T>
@@ -396,4 +407,5 @@ public:
 	using List<T>::Print;
 
 	using List<T>::operator[];
+	using List<T>::operator<<;
 };
