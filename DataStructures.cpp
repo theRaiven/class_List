@@ -3,6 +3,7 @@
 
 #include "List.h"
 #include <utility>
+#include <chrono>
 using namespace std;
 
 auto Swap = [](auto x, auto y)
@@ -29,23 +30,22 @@ using DistList = List<Distance<T>>;
 
 int main()
 {
-	/*int a{ 6 };
-	int b{ 4 };
-	Swap(a, b);
-	cout << a << " " << b << endl;*/
-	List<int> myList{ 1,3,4,6 };
-	
-	
-	myList.Remove(3);
-	myList.Remove(5);
-	/*myList.PopFront();
-	myList.PopFront();
-	myList.PopFront();
-	myList.PopFront();*/
-	
-	myList.PopFront();
+	setlocale(LC_ALL, "rus");
+	List<int> myList{ 9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9 };
 	//myList.Print();
-	cout << myList;
+
+	cout << endl;
+	myList.Swap(myList(2), myList(3));
+
+	//myList.Print();
+	cout << endl;
+	auto start{ chrono::high_resolution_clock::now()};
+	myList.Sort(0, myList.Size());
+	auto end{ chrono::high_resolution_clock::now() };
+	chrono::duration<double> direction{ end - start };
+	cout << "Сортровка работара: " << direction.count() << " секунд." << endl;
+
+	myList.Print();
 	myList.Clear();
 
 

@@ -19,13 +19,6 @@ private:
 	size_t size{ 0 };
 	size_t maxSize{ 0 };
 
-	/*void Swap(std::shared_ptr<Node<T>>& _firstCell, std::shared_ptr<Node<T>>& _secondCell)
-	{
-		auto temp{ std::move(_firstCell->data) };
-		_firstCell->data = std::move(_secondCell->data);
-		_secondCell->data = std::move(temp);
-	}*/
-
 public:
 	constexpr List() {}
 	constexpr List(std::initializer_list<T> firstNodes)
@@ -257,21 +250,29 @@ public:
 		size = 0;
 		maxSize = 0;
 	}
-	/*void QuickSort(size_t left, size_t right)
+
+	void Swap(std::shared_ptr<Node<T>> _firstCell, std::shared_ptr<Node<T>> _secondCell)
+	{
+		auto temp{ _firstCell->data };
+		_firstCell->data = std::move(_secondCell->data);
+		_secondCell->data = std::move(temp);
+	}
+
+	void Sort(size_t left, size_t right)
 	{
 		if (left >= right) return;
 		
-		std::shared_ptr<Node<T>> _startCell{ Cell };
- 		std::shared_ptr<Node<T>> _endCell{ Cell };
+		std::shared_ptr<Node<T>> _startCell{ head };
+ 		std::shared_ptr<Node<T>> _endCell{ tail };
 		
 		for (size_t i = 0; i < left; ++i)
 		{
 			_startCell = _startCell->ptrNext;
 		}
 		
-		for (size_t i = 0; i < right; ++i)
+		for (size_t i = 0; i < size - right; ++i)
 		{
-			_endCell = _endCell->ptrNext;
+			_endCell = _endCell->ptrPrev;
 		}
 
 		T pivot{ _startCell->data };
@@ -295,6 +296,15 @@ public:
 			{
 				Swap(iCell, jCell);
 			}
+			if (jCell->data == iCell->data)
+			{
+				if (iCell != jCell)
+				{
+					iCell = iCell->ptrNext;
+					if (iCell == jCell) break;
+				}
+				continue;
+			}
 		}
 
 		if (_startCell != jCell)
@@ -305,7 +315,7 @@ public:
 		{
 			QuickSort(left + 1, right); // "Правый кусок"
 		}
-	}*/
+	}
 
 	constexpr bool IsEmpty() const 
 	{
@@ -343,6 +353,21 @@ public:
 		}
 		return _indexCell->data;
 	}
+	
+	decltype(auto) operator()(int index)
+	{
+		if (index < 0 || index >= size)
+		{
+			throw std::out_of_range("Index out of bounds");
+		}
+		std::shared_ptr<Node<T>> _indexCell = head;
+		for (int i = 0; i < index; i++)
+		{
+			_indexCell = _indexCell->ptrNext;
+		}
+		return _indexCell;
+	}
+
 
 	friend std::ostream& operator<<(std::ostream& out, List<T>& list)
 	{
