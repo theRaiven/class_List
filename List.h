@@ -254,8 +254,8 @@ public:
 	void Swap(std::shared_ptr<Node<T>> _firstCell, std::shared_ptr<Node<T>> _secondCell)
 	{
 		auto temp{ _firstCell->data };
-		_firstCell->data = std::move(_secondCell->data);
-		_secondCell->data = std::move(temp);
+		_firstCell->data = _secondCell->data;
+		_secondCell->data = temp;
 	}
 
 	void Sort(size_t left, size_t right)
