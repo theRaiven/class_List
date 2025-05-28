@@ -248,12 +248,12 @@ public:
 	{
 		while (head != nullptr)
 		{
-			std::shared_ptr<Node<T>> _nextCell = head->ptrNext;
-			head->ptrNext = nullptr;
-			head->ptrPrev = nullptr;
-			head = _nextCell;
+			auto next = head->ptrNext;
+			head->ptrPrev.reset();  // явный сброс указателей
+			head->ptrNext.reset();
+			head = next;  // shared_ptr автоматически удалит старый узел
 		}
-		tail = nullptr;
+		tail.reset();
 		size = 0;
 		maxSize = 0;
 	}
